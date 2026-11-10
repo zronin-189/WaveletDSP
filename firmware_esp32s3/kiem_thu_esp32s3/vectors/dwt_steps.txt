@@ -1,0 +1,17 @@
+lf=30 last=93 ext_len=122 zA_len=151 a_take_len=46 dwt_len=46
+a_take_err=41.142207252027248
+d_take_err=10.998540322682235
+index_search:
+  start=1 err=42.6 tlen=46
+  start=2 err=41.1 tlen=46
+  start=3 err=41.2 tlen=46
+  start=4 err=38.3 tlen=46
+  start=5 err=40 tlen=46
+  start=6 err=37 tlen=46
+  start=7 err=37 tlen=46
+  start=8 err=34 tlen=46
+ext_head= 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 1 2 3 4 5 6 7 8 9 10 11
+ext_tail= 54 55 56 57 58 59 60 61 62 63 64 64 63 62 61 60 59 58 57 56 55 54 53 52 51 50 49 48 47 46 45 44 43 42 41 40 39 38 37 36
+x_head= 1 2 3 4 5 6 7 8
+idwt_len=64 rec_err=2.828649314778886e-09
+waverec1_len=64 err=2.828649314778886e-09 L=[46;46;64]
