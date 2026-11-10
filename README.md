@@ -2,9 +2,10 @@
 
 ## Firmware ESP32-S3: hai nhánh
 
-**Nhánh hiện tại: `debug`.** Firmware chờ lệnh Serial, giữ ghi cặp PCM để
-nghe so sánh và cải tiến. Nhánh `main` dành cho chạy độc lập sau cấp nguồn,
-tự lấy nền rồi phát mic → lọc → loa, không ghi cặp kiểm thử.
+**Nhánh hiện tại: `main`.** Sau cấp nguồn, firmware tự khởi động lọc ở
+volume 20%: ổn định mic, lấy nền rồi phát mic → lọc → loa. Không cần máy
+tính gửi lệnh, không ghi cặp kiểm thử hay tạo WAV. Nhánh `debug` giữ chế
+độ khởi động bằng Serial và ghi cặp PCM để nghe so sánh, cải tiến.
 
 Cả hai giữ coif5/L5, float32, 16 kHz, gain 8× và đệm danh định 1,25 giây.
 Mức đệm này đã được nghe xác nhận ở firmware trước khi tách nhánh;
