@@ -1,7 +1,3 @@
-> Nhánh `main` tắt ghi mẫu kiểm thử và tự chạy khi cấp nguồn. Các công cụ
-> thu cặp WAV/noise dump bên dưới cần firmware nhánh `debug`. Bài test
-> DSP trên PC và firmware test độc lập vẫn được giữ để phát triển.
-
 # Kiểm thử WaveletDSP trên PC và ESP32-S3
 
 Thư mục này chỉ chứa kiểm thử, không phải firmware thu mic/phát loa.

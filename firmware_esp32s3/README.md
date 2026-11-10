@@ -2,34 +2,26 @@
 
 Target: ESP32-S3 N16R8, Arduino framework, Wi-Fi/BT off.
 
-## Chế độ nhánh main
+## Chế độ nhánh debug
 
-`AUDIO_TEST_CAPTURE=0`, `AUDIO_AUTOSTART=1`, volume khởi động 20%, gain 8×.
-Sau cấp nguồn, firmware tự yêu cầu chạy lọc sau khi khởi tạo task/buffer;
-không chờ kết nối Serial hay lệnh máy tính. Giữ im lặng trong 1 giây ổn
-định mic và 0,25 giây lấy nền tính từ lúc I2S bắt đầu, sau đó có thể nói.
-Pn cố định cho đến khi stop/start hoặc cấp nguồn lại. Nếu nền thay đổi,
-cần lấy lại mẫu nền khi không nói.
+`AUDIO_TEST_CAPTURE=1`, `AUDIO_AUTOSTART=0`, volume khởi động 5%.
+Sau reset chờ lệnh Serial; dùng `volume 20` rồi `start` để thử lọc với
+gain 8×/volume 20%. Giữ im lặng trong 1 giây ổn định mic và 0,25 giây lấy
+nền tính từ lúc I2S bắt đầu; Pn cố định cho đến khi stop/start lại.
 
-Mic → coif5/L5 Wiener → loa chạy liên tục. Bộ đệm danh định 1,25 giây
-được giữ; khoảng ổn định mic ban đầu tính riêng. Đây không phải số đo
-trễ âm học và chưa giảm thêm độ trễ trong lần tách nhánh này.
+Ghi đồng thời PCM trước/sau lọc trong tám hop đầu của phiên lọc, không
+phải ghi liên tục vô hạn. Sau `stop` và trạng thái `IDLE`, `filter_dump`
+chuyển cặp PCM về PC để công cụ host tạo WAV. `noise_dump` xuất mẫu nền.
+Không truyền bản thu trong lúc đang phát. Lệnh `raw` không tạo cặp lọc.
 
-Không cấp phát/ghi cặp PCM hoặc snapshot nhiễu kiểm thử, không có lệnh
-`filter_dump`/`noise_dump`, không tạo WAV. Vẫn có Serial `status`, `stop`,
-`start`, `raw`, `volume 0..25` để chẩn đoán khi cần; hoạt động bình thường
-không cần PC. Khi phát hiện lỗi, giữ cơ chế dừng I2S hiện có; không tự
-khởi động lại/lấy nền trong lúc người dùng đang nói.
+Chạy `python firmware_esp32s3/kiem_thu_esp32s3/host/filter_listen_test.py`
+từ gốc repo với Python có pyserial để thu cặp nghe thử. Công cụ mặc định
+từ chối ghi đè kết quả đã tồn tại; dùng `--name` riêng cho mỗi lượt thử.
 
-SD MAX98357A nối 3V3, GPIO10 không dùng. Mic WS4/SCK5/SD6;
-ampli LRC7/BCLK8/DIN9, Vin 5V, GAIN GND, GND chung; loa 4Ω/3W nối OUT+/OUT−.
-Không đổi phần cứng so với bản đã nghe đạt. Nạp firmware là thao tác riêng;
-chuyển Git branch không thay chương trình đang nằm trên board.
-
-Build: `pio run -d firmware_esp32s3`. Bản tách nhánh mới đã build trên PC;
-chưa nạp/kiểm thử tự chạy trên board. Các kết quả lịch sử bên dưới thuộc
-những lượt trước khi tách nhánh. Để thu cặp WAV, dùng nhánh `debug`; bản đó
-chờ lệnh và ghi tám hop đầu, sau stop mới tải cặp PCM về PC.
+Nhánh `main` dùng cùng thuật toán và chân nối, nhưng tự khởi động ở
+volume 20% và không cấp phát/ghi/xuất mẫu kiểm thử. Chuyển nhánh không
+tự nạp firmware vào board. Các kết quả lịch sử bên dưới thuộc các lượt
+trước khi tách nhánh, không chứng minh bản mới đã chạy trên phần cứng.
 
 **Dọn file 2026-11-10:** các file tạm, cache bài test và log chẩn đoán cũ
 đã được cách ly tại `.trash/don_dep_20261110/` tính từ gốc dự án.
