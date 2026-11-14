@@ -1,9 +1,0 @@
-fs=16000
-N=48000
-block=16000
-noise_n=4000
-level=5
-filter_len=30
-a_imp_len=46
-d_imp_len=46
-block0_wavedec_len=16143
