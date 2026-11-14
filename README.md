@@ -1,5 +1,12 @@
 # WaveletDSP — Khử nhiễu tiếng nói bằng MATLAB & Simulink
 
+**Nhánh `dev`: hai bản Arduino một file.** Dùng `arduino_main/src/main.cpp`
+để tự chạy mic → lọc → loa, hoặc `arduino_debug/src/main.cpp` để ghi cặp PCM
+kiểm thử. Mỗi bản có `platformio.ini` độc lập; có thể copy toàn bộ `main.cpp`
+sang sketch Arduino IDE. Xem [hướng dẫn](ARDUINO_SINGLE_FILE.md) về phiên bản
+core, thiết lập board và cách chạy. Mã nhiều file bên dưới vẫn được giữ làm
+tham chiếu; các nhánh Git `main` và `debug` không thay đổi trong lần bổ sung này.
+
 ## Firmware ESP32-S3: hai nhánh
 
 **Nhánh hiện tại: `main`.** Sau cấp nguồn, firmware tự khởi động lọc ở
