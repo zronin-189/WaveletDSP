@@ -4,9 +4,10 @@ Nhánh `dev` chứa bản Arduino cơ bản để kiểm tra đường âm thanh
 **INMP441 → ESP32-S3 → MAX98357A → loa**. Cấp nguồn là chạy liên tục;
 không wavelet, lấy nền, chờ một giây hay xuất WAV.
 
-Firmware thu một đoạn **128 mẫu tại 16 kHz**, chép nguyên word 32-bit của slot
-mic sang cả hai kênh TX rồi gửi ngay. **Gain 1**, không limiter, không volume
-số; vì thế có thể nghe nhỏ hơn bản xử lý trước đây. Một đoạn dài **8 ms**,
+Firmware thu một đoạn **128 mẫu tại 16 kHz**, lấy mẫu PCM 24-bit từ slot
+mic, nhân **gain 4×**, bão hòa trong dải PCM rồi phát cả hai kênh TX.
+Không lọc hoặc chỉnh volume riêng. Phép nhân dùng int64 để tránh tràn số;
+bão hòa có thể gây méo nếu tín hiệu đầu vào quá lớn. Một đoạn dài **8 ms**,
 nhưng vẫn có bộ đệm DMA và thời gian chuyển đổi của phần cứng: chưa đo độ trễ
 mic–loa và không khẳng định tổng trễ chỉ 8 ms. DMA giữ 8 buffer mỗi chiều.
 
@@ -50,9 +51,9 @@ lại; không tự lặp khởi động khi phần cứng lỗi.
 
 ## Kiểm chứng
 
-Bản này được build bằng PlatformIO và kiểm tra trên máy tính việc giữ nguyên
-mẫu khi chép slot mic sang stereo. Chưa nạp hoặc nghe thử trên board trong đợt
-này; cần kiểm thử phần cứng trước khi kết luận âm lượng và độ liền mạch.
+Bản này được build bằng PlatformIO và kiểm tra trên máy tính phép nhân gain, bão hòa và
+chép stereo. Bản gain 4× đã nạp vào ESP32-S3, xác minh hash và thấy RUNNING
+trong lượt theo dõi 8 giây không có STOP/panic. Chất lượng nghe do người dùng kiểm tra.
 Bản sửa tương thích được build trên core 2.0.17; API và thanh ghi đã đối chiếu
 với nguồn chính thức core 3.3.4 / IDF 5.5, **chưa build hoặc nghe thử trên core
 3.x tại máy này**. Driver legacy chưa được thay bằng driver mới.

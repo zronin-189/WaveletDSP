@@ -1,4 +1,4 @@
-// Firststep: INMP441 -> ESP32-S3 -> MAX98357A, không lọc hay thay đổi gain.
+// Firststep: INMP441 -> ESP32-S3 -> MAX98357A, không lọc, gain 4x và bão hòa chống tràn PCM.
 // Arduino-ESP32 2.x/3.x (IDF 4.4/5.x), driver I2S legacy; PlatformIO/Arduino IDE.
 #include <Arduino.h>
 #include <driver/i2s.h>
@@ -25,6 +25,7 @@ static constexpr int AMP_BCLK = 8;
 static constexpr int AMP_DIN = 9;
 static constexpr int MIC_SLOT = 0;
 static constexpr int SAMPLE_RATE = 16000;
+static constexpr int MIC_GAIN = 4;
 static constexpr int CHUNK_FRAMES = 128;
 static constexpr int DMA_BUFFERS = 8;
 static constexpr int IO_TIMEOUT_MS = 100;
@@ -36,12 +37,21 @@ static QueueHandle_t events = nullptr;
 static bool installed = false;
 static bool running = false;
 
-// Giữ nguyên từng word 32-bit từ slot mic; phát cùng tín hiệu ở cả hai kênh.
+// Giải mã PCM 24-bit, nhân gain bằng int64 để không tràn số trước bão hòa.
+static int32_t amplify_mic(int32_t word)
+{
+    int64_t value = static_cast<int64_t>(word / 256) * MIC_GAIN;
+    if (value > 8388607) value = 8388607;
+    if (value < -8388608) value = -8388608;
+    return static_cast<int32_t>(value * 256);
+}
+
+// Phát mẫu đã khuếch đại ở cả hai kênh; không lọc hay thu mẫu nền.
 static void copy_mic_to_stereo(int32_t *words, size_t frames)
 {
     for (size_t frame = 0; frame < frames; ++frame)
     {
-        const int32_t sample = words[2 * frame + MIC_SLOT];
+        const int32_t sample = amplify_mic(words[2 * frame + MIC_SLOT]);
         words[2 * frame] = sample;
         words[2 * frame + 1] = sample;
     }
@@ -134,7 +144,7 @@ void setup()
         return;
     }
     running = true;
-    Serial.println("RUNNING firststep fs=16000 chunk=128 gain=1; no filter/calibration/WAV");
+    Serial.println("RUNNING firststep fs=16000 chunk=128 gain=4; no filter/calibration/WAV");
 }
 
 void loop()
