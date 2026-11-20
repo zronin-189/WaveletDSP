@@ -39,7 +39,7 @@ WAV sau lọc có gain 8×, limiter rồi volume 20%; cần cân mức khi so ng
 MATLAB nên dùng WAV trước lọc và đoạn đầu đúng là chỉ có nền.
 
 Lệnh Serial 115200 baud, kết thúc dòng Newline: `start`, `raw`, `stop`, `status`,
-`volume 0..25`. `pins`, `raw_dump`, `noise_dump`, `filter_dump` là chẩn đoán;
+`volume 0..50`. `pins`, `raw_dump`, `noise_dump`, `filter_dump` là chẩn đoán;
 không chạy `pins` trong lượt đánh giá âm thanh vì có thể ảnh hưởng deadline.
 Chỉ dùng `raw_dump` khi đã dừng. Khi lỗi `noise_profile`, kiểm tra đầu vào;
 không ép bỏ kiểm tra để lấy WAV lỗi.

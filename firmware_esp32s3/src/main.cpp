@@ -89,7 +89,7 @@ void overlap_fade(float *left_tail, const float *right_head, int ov);
 #define AUDIO_SETTLE_SAMPLES (5 * DSP_FS)
 #define AUDIO_RAW_SETTLE_SAMPLES (5 * DSP_FS)
 #define AUDIO_DEFAULT_VOLUME 0.05f
-#define AUDIO_MAX_VOLUME 0.25f
+#define AUDIO_MAX_VOLUME 0.50f
 #define AUDIO_TEST_CAPTURE 1
 #define AUDIO_AUTOSTART 0
 #define AUDIO_BOOT_VOLUME_PERCENT 5
@@ -1401,9 +1401,9 @@ void audio_pipeline_init()
                   AUDIO_AUTOSTART, AUDIO_TEST_CAPTURE, AUDIO_BOOT_VOLUME_PERCENT);
 #if AUDIO_TEST_CAPTURE
     Serial.println(
-        "Commands: start | raw | stop | status | pins | noise_dump | filter_dump | volume 0..25 (percent)");
+        "Commands: start | raw | stop | status | pins | noise_dump | filter_dump | volume 0..50 (percent)");
 #else
-    Serial.println("Commands: start | raw | stop | status | pins | volume 0..25 (percent)");
+    Serial.println("Commands: start | raw | stop | status | pins | volume 0..50 (percent)");
 #endif
     Serial.println(
         "start: stay quiet through settling and separate 0.25 s noise capture; profile frozen until stop/start.");
@@ -1609,7 +1609,7 @@ void audio_pipeline_command(const char *command)
         unsigned long percent = strtoul(command + 7, &end, 10);
         if (end == command + 7 || *end || percent > static_cast<unsigned>(AUDIO_MAX_VOLUME * 100.0f))
         {
-            Serial.println("Rejected: volume must be an integer 0..25.");
+            Serial.println("Rejected: volume must be an integer 0..50.");
         }
         else
         {
@@ -1635,7 +1635,7 @@ void audio_pipeline_command(const char *command)
     }
     else
     {
-        Serial.println("Unknown command. Use start/raw/stop/status/volume 0..25.");
+        Serial.println("Unknown command. Use start/raw/stop/status/volume 0..50.");
     }
 }
 
