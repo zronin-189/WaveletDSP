@@ -21,9 +21,9 @@ Mở `firmware_esp32s3` trong VS Code/PlatformIO, chạy `pio run`, chọn đún
 rồi Upload. Chỉ một file firmware `src/main.cpp`; `platformio.ini` giữ cấu hình
 board. Sau bật nguồn giữ yên nền trong thời gian ổn định và lấy mẫu nền. Khi
 Serial báo `RUNNING`, nói vào mic; loa phát tín hiệu sau khoảng đệm xử lý.
-Volume mặc định **20%**, gain phát **8×**, limiter đặt trước volume.
+Volume mặc định **80%**, gain phát **8×**, limiter đặt trước volume.
 
-Serial 115200 baud, Newline: `status`, `stop`, `start`, `raw`, `volume 0..50`.
+Serial 115200 baud, Newline: `status`, `stop`, `start`, `raw`, `volume 0..80`.
 `start` lấy lại nền; `raw` kiểm tra đường truyền không lọc. Không có lệnh dump
 hay công cụ xuất WAV trên nhánh này. Khi lỗi, luồng dừng và I2S được đóng;
 SD ampli vẫn nối cố định 3V3, không có điều khiển mute bằng GPIO.
@@ -55,3 +55,5 @@ này **chưa chạy kiểm thử với ampli/loa**. Các lượt mic-only không
 thử âm thanh đầu ra thực tế. Chưa đo độ trễ âm học. Dùng nhánh `debug` để ghi
 WAV và so chất lượng; [`MATLAB&SIM`](https://github.com/zronin-189/WaveletDSP/tree/MATLAB%26SIM)
 giữ toàn bộ mã MATLAB/Simulink hiện có.
+
+Volume khởi động và trần cho phép đều **80%**; tăng âm lượng có thể làm loa méo/hú.
