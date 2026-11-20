@@ -1,5 +1,5 @@
 // Firststep: INMP441 -> ESP32-S3 -> MAX98357A, không lọc hay thay đổi gain.
-// Arduino-ESP32 2.0.17 / ESP-IDF 4.4.7; một file dùng cho PlatformIO/Arduino IDE.
+// Arduino-ESP32 2.x/3.x (IDF 4.4/5.x), driver I2S legacy; PlatformIO/Arduino IDE.
 #include <Arduino.h>
 #include <driver/i2s.h>
 #include <esp32-hal-matrix.h>
@@ -7,8 +7,13 @@
 #include <soc/gpio_sig_map.h>
 #include <soc/i2s_struct.h>
 
-#if !defined(CONFIG_IDF_TARGET_ESP32S3) || ESP_IDF_VERSION != ESP_IDF_VERSION_VAL(4, 4, 7)
-#error Firststep requires ESP32-S3 and Arduino-ESP32 2.0.17 (IDF 4.4.7)
+#if !defined(CONFIG_IDF_TARGET_ESP32S3)
+#error Firststep requires an ESP32-S3 board; select the matching S3 board in Tools > Board
+#endif
+
+// Không khóa một bản vá IDF; API legacy còn có trên IDF 4.4 và 5.x.
+#if ESP_IDF_VERSION < ESP_IDF_VERSION_VAL(4, 4, 0) || ESP_IDF_VERSION_MAJOR >= 6
+#error Firststep requires ESP-IDF 4.4 or 5.x with the legacy I2S driver
 #endif
 
 // Mic: nguồn 3V3, L/R nối GND. Ampli: Vin 5V, SD nối 3V3, GAIN nối GND.
@@ -105,7 +110,7 @@ static esp_err_t begin_audio()
     pinMode(AMP_BCLK, OUTPUT);
     pinMatrixOutAttach(AMP_LRC, I2S0O_WS_OUT_IDX, false, false);
     pinMatrixOutAttach(AMP_BCLK, I2S0O_BCK_OUT_IDX, false, false);
-    // Giữ workaround stereo RX đã dùng trên S3 / IDF 4.4.7.
+    // Cấu hình stereo RX của S3; các trường này còn có trong IDF 4.4 và 5.5.
     I2S0.rx_conf.rx_mono = 0;
     I2S0.rx_conf.rx_mono_fst_vld = 0;
     I2S0.tx_conf.tx_ws_idle_pol = 0;

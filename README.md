@@ -28,9 +28,21 @@ port board rồi Upload. Serial 115200 chỉ báo RUNNING hoặc STOP khi có l�
 Không cần gửi `start`; không có các lệnh thu WAV hay xử lý DSP.
 
 Một file `firmware_esp32s3/src/main.cpp` chứa toàn bộ firmware. Có thể chép nội
-dung vào sketch Arduino IDE, dùng **Arduino-ESP32 2.0.17 / IDF 4.4.7**,
+dung vào sketch Arduino IDE, dùng **esp32 by Espressif Systems**, core **2.x (IDF 4.4)** hoặc
+**3.x (IDF 5.x)**,
 ESP32-S3 N16R8, flash 16 MB, OPI PSRAM 8 MB. Cấu hình PlatformIO được pin tại
-`espressif32@7.1.3`; không tự chuyển sang Arduino core 3.x.
+`espressif32@7.1.3` (core 2.0.17). Arduino IDE không còn bắt buộc đúng bản vá này.
+
+Trong Boards Manager cài gói **esp32 by Espressif Systems**. Chọn board theo
+phần cứng: **ESP32S3 Dev Module** cho module/devkit S3 thông thường, hoặc
+**ESP32-S3-USB-OTG** nếu dùng đúng board USB-OTG của Espressif. Tên board không
+phải phiên bản core; xem phiên bản gói trong Boards Manager. Đặt flash/PSRAM và
+USB theo board thực tế, không mặc định mọi board S3 đều là N16R8.
+
+Nếu core 3.x báo cảnh báo driver I2S `deprecated`, đó là cảnh báo API cũ,
+không phải lỗi khóa phiên bản. Không dùng đồng thời thư viện `ESP_I2S.h`/driver
+I2S mới trong sketch này. Khi gặp lỗi tiếp theo, gửi toàn bộ thông báo compile
+và phiên bản core; không chỉ bỏ các dòng `#error` khác.
 
 Mỗi lần đọc/ghi có timeout; khi timeout, thiếu byte hoặc DMA lỗi, firmware đóng
 I2S và đưa tín hiệu ampli về thấp. SD ampli vẫn nối cố định 3V3. Reset để thử
@@ -41,4 +53,7 @@ lại; không tự lặp khởi động khi phần cứng lỗi.
 Bản này được build bằng PlatformIO và kiểm tra trên máy tính việc giữ nguyên
 mẫu khi chép slot mic sang stereo. Chưa nạp hoặc nghe thử trên board trong đợt
 này; cần kiểm thử phần cứng trước khi kết luận âm lượng và độ liền mạch.
+Bản sửa tương thích được build trên core 2.0.17; API và thanh ghi đã đối chiếu
+với nguồn chính thức core 3.3.4 / IDF 5.5, **chưa build hoặc nghe thử trên core
+3.x tại máy này**. Driver legacy chưa được thay bằng driver mới.
 Các nhánh `main`, `debug` giữ thuật toán lọc; `MATLAB&SIM` giữ MATLAB/Simulink.
