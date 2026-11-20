@@ -35,11 +35,11 @@ làm mất bản thu RAM. Firmware ghi 10 giây rồi tự dừng; script tải 
 WAV nằm trong `results/`, log/JSON trong `results/du_lieu_kiem_thu/`; không đưa
 bản ghi lên Git. Mỗi lượt dùng tên mới để tránh ghi đè. WAV trước lọc là PCM16,
 **gain 1, chưa gain phát/limiter/volume**; vẫn có lượng tử hóa từ mẫu mic.
-WAV sau lọc có gain 8×, limiter rồi volume 20%; cần cân mức khi so nghe hai bản.
+WAV sau lọc có gain 8×, limiter rồi volume 80%; cần cân mức khi so nghe hai bản.
 MATLAB nên dùng WAV trước lọc và đoạn đầu đúng là chỉ có nền.
 
 Lệnh Serial 115200 baud, kết thúc dòng Newline: `start`, `raw`, `stop`, `status`,
-`volume 0..50`. `pins`, `raw_dump`, `noise_dump`, `filter_dump` là chẩn đoán;
+`volume 0..80`. `pins`, `raw_dump`, `noise_dump`, `filter_dump` là chẩn đoán;
 không chạy `pins` trong lượt đánh giá âm thanh vì có thể ảnh hưởng deadline.
 Chỉ dùng `raw_dump` khi đã dừng. Khi lỗi `noise_profile`, kiểm tra đầu vào;
 không ép bỏ kiểm tra để lấy WAV lỗi.
@@ -71,3 +71,5 @@ Bản 2.048 trước khi trình bày lại đã thu 10 giây trên ESP32-S3, DSP
 nhánh này kiểm tra lại build, tính tương đương code và DSP trên máy tính;
 không nạp/thu lại phần cứng. Nhánh `main` dành cho hệ mic–ampli–loa;
 [`MATLAB&SIM`](https://github.com/zronin-189/WaveletDSP/tree/MATLAB%26SIM) giữ MATLAB/Simulink.
+
+Volume khởi động và trần cho phép đều **80%**; tăng âm lượng có thể làm loa méo/hú.

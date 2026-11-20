@@ -64,7 +64,7 @@ def main():
             con.write(b'stop\n')
             until('state=IDLE ', 8)
             print('Bắt đầu lấy nền. Chỉ bật nhạc khi thấy RUNNING.', flush=True)
-            con.write(b'volume 20\nstart\n')
+            con.write(b'volume 80\nstart\n')
             until('CAPTURE_READY seconds=10', 35)
             print('Đã thu đủ; đang tải WAV, giữ nguyên kết nối...', flush=True)
         con.write(b'status\n')
